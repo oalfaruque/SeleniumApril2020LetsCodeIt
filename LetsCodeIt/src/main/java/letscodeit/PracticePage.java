@@ -16,7 +16,7 @@ public class PracticePage {
     @FindBy(xpath = "//select[@id='carselect']")
     WebElement selectCars;
 
-    @FindBy(id = "multiple-select-example")
+    @FindBy(xpath = "//select[@id='multiple-select-example']")
     WebElement multipleSelection;
 
 
@@ -29,6 +29,8 @@ public class PracticePage {
     public void carSelectionHONDARadioButton(){
         hondaradio.click();
     }
+
+
     public void selectCarsFromTheList1(String car) throws InterruptedException {
         Select select1 = new Select(selectCars);
         select1.selectByVisibleText(car);

@@ -2,14 +2,18 @@ package letscodeitpractice;
 
 import letscodeit.PracticePage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import javax.swing.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -74,7 +78,6 @@ public class TestPracticePage {
     @Test
     //to test all the selecting items from the List in one method
     public void testSelectCarsFromTheList() throws InterruptedException {
-        accessToLetsCodeItPracticePage();
         WebElement element = driver.findElement(By.xpath("//select[@id='carselect']"));
         Select select = new Select(element);
         select.selectByIndex(1);
@@ -112,6 +115,17 @@ public class TestPracticePage {
         accessToLetsCodeItPracticePage();
         practicePage.selectMultipleOptionsFromTheList();
     }
+
+    @Test
+    public void testMultipleSelection() throws InterruptedException {
+        WebElement apple = driver.findElement(By.xpath("//option[@value='apple']"));
+        WebElement orange = driver.findElement(By.xpath("//option[@value='orange']"));
+        WebElement peach = driver.findElement(By.xpath("//option[@value='peach']"));
+        Actions action = new Actions(driver);
+        action.keyDown(Keys.CONTROL).click(apple).click(orange).click(peach).build().perform();
+        Thread.sleep(2000);
+    }
+
     @AfterMethod
     public void tearDown(){
         driver.quit();
