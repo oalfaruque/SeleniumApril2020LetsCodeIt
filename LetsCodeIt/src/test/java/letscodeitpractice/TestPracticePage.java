@@ -39,7 +39,7 @@ public class TestPracticePage {
     @Test
     public void radioButtonSelection() throws InterruptedException {
         boolean isChecked = false;
-        //to select all the radio Buttons
+        //to select all the radio Buttons and Check Box in one method
 //      List<WebElement> radioButtons = driver.findElements
 //      (By.xpath("//input[contains(@type,'radio') and contains(@name,'cars')]"));
 
