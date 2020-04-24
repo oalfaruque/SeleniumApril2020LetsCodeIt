@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -71,10 +72,41 @@ public class TestPracticePage {
         practicePage.carSelectionHONDARadioButton();
     }
     @Test
+    //to test all the selecting items from the List in one method
     public void testSelectCarsFromTheList() throws InterruptedException {
         accessToLetsCodeItPracticePage();
-        practicePage.selectCarsFromTheList("Honda");
+        WebElement element = driver.findElement(By.xpath("//select[@id='carselect']"));
+        Select select = new Select(element);
+        select.selectByIndex(1);
+        Thread.sleep(2000);
+        select.selectByValue("bmw");
+        Thread.sleep(2000);
+        select.selectByVisibleText("Honda");
+        Thread.sleep(2000);
+        //to get all the available listed options
+        List<WebElement> elementList = select.getOptions();
+        for (int i = 0; i<elementList.size(); i++){
+            String options = elementList.get(i).getText();
+            System.out.println(options);
+        }
     }
+
+    @Test
+    public void testSelectCarsFromTheList1() throws InterruptedException {
+        accessToLetsCodeItPracticePage();
+        practicePage.selectCarsFromTheList1("Honda");
+    }
+    @Test
+    public void testSelectCarsFromTheList2() throws InterruptedException {
+        accessToLetsCodeItPracticePage();
+        practicePage.selectCarsFromTheList2("bmw");
+    }
+    @Test
+    public void testSelectCarsFromTheList3() throws InterruptedException {
+        accessToLetsCodeItPracticePage();
+        practicePage.selectCarsFromTheList(1);
+    }
+
     @Test
     public void testMultipleSelectionFromTheList() throws InterruptedException {
         accessToLetsCodeItPracticePage();

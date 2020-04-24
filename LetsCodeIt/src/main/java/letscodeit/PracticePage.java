@@ -29,9 +29,19 @@ public class PracticePage {
     public void carSelectionHONDARadioButton(){
         hondaradio.click();
     }
-    public void selectCarsFromTheList(String car) throws InterruptedException {
-        Select select = new Select(selectCars);
-        select.selectByVisibleText(car);
+    public void selectCarsFromTheList1(String car) throws InterruptedException {
+        Select select1 = new Select(selectCars);
+        select1.selectByVisibleText(car);
+        Thread.sleep(2000);
+    }
+    public void selectCarsFromTheList2(String car) throws InterruptedException {
+        Select select2 = new Select(selectCars);
+        select2.selectByValue(car);
+        Thread.sleep(2000);
+    }
+    public void selectCarsFromTheList(int index) throws InterruptedException {
+        Select select3 = new Select(selectCars);
+        select3.selectByIndex(index);
         Thread.sleep(2000);
     }
     public void selectMultipleOptionsFromTheList() throws InterruptedException {
