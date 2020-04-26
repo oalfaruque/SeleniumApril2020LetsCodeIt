@@ -12,9 +12,8 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import javax.swing.*;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class TestPracticePage {
@@ -26,10 +25,7 @@ public class TestPracticePage {
     public void setUp(){
         System.setProperty("webdriver.chrome.driver",
         "C:\\Users\\Omar Al-Faruque\\IdeaProjects\\SeleniumAprilL2020LetsCodeIt\\Drivers\\chromedriver81.exe");
-        //System.setProperty("webdriver.gecko.driver",
-        // "C:\\Users\\Omar Al-Faruque\\IdeaProjects\\SeleniumAprilL2020LetsCodeIt\\Drivers\\geckodriver.exe");
         driver = new ChromeDriver();
-        //driver = new FirefoxDriver();
         driver.get("https://learn.letskodeit.com/p/practice");
         driver.manage().window().maximize();
         driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
@@ -42,7 +38,7 @@ public class TestPracticePage {
     }
     @Test
     public void radioButtonSelection() throws InterruptedException {
-        boolean isChecked = false;
+        boolean isChecked;
         //to select all the radio Buttons and Check Box in one method
 //      List<WebElement> radioButtons = driver.findElements
 //      (By.xpath("//input[contains(@type,'radio') and contains(@name,'cars')]"));
@@ -53,7 +49,7 @@ public class TestPracticePage {
         for (int i = 0; i<radioButtons.size(); i++){
             //to check if the buttons are already selected
             isChecked = radioButtons.get(i).isSelected();
-                if (!isChecked){
+                if (!isChecked){//by default boolean variable is false
                     radioButtons.get(i).click();
                     Thread.sleep(2000);
                 }
@@ -116,7 +112,7 @@ public class TestPracticePage {
         practicePage.selectMultipleOptionsFromTheList();
     }
 
-    @Test
+    @Test//to choose multiple elements from the dropdown box
     public void testMultipleSelection() throws InterruptedException {
         WebElement apple = driver.findElement(By.xpath("//option[@value='apple']"));
         WebElement orange = driver.findElement(By.xpath("//option[@value='orange']"));
@@ -124,6 +120,28 @@ public class TestPracticePage {
         Actions action = new Actions(driver);
         action.keyDown(Keys.CONTROL).click(apple).click(orange).click(peach).build().perform();
         Thread.sleep(2000);
+    }
+    @Test
+    public void testWindowHandles() throws InterruptedException {
+        String parentWindow = driver.getWindowHandle();//to get ID of parent Window
+        System.out.println("Parent Window ID is: " +parentWindow);//to print parent window ID
+        System.out.println("Parent Window Title is: " +driver.getTitle());//to print/assert parent window
+
+        driver.findElement(By.xpath("//button[@id='openwindow']")).click();//to open new window
+        Set<String> windows = driver.getWindowHandles();//to get all windows IDs
+        for (String window : windows) {//for each loop to iterate all window IDs
+            System.out.println(window);//to print all window IDs
+            if(!window.equals(parentWindow)){//checking new window
+                driver.switchTo().window(window);//switching to new window
+                System.out.println("New Window Title is: " +driver.getTitle());//to get and print new window title
+                Thread.sleep(3000);
+                driver.findElement(By.id("search-courses")).sendKeys
+                        ("Selenium WebDriver With Java");//to type in the new window
+                driver.close();//to close new window
+                }
+            }
+        driver.switchTo().window(parentWindow);//to get back into parent window
+        System.out.println("Returned Parent Window Title is: "+driver.getTitle());//to print/assert returned window
     }
 
     @AfterMethod

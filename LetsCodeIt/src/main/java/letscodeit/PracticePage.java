@@ -1,8 +1,12 @@
 package letscodeit;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.server.handler.SwitchToWindow;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
+import java.util.Set;
 
 public class PracticePage {
 
@@ -19,6 +23,11 @@ public class PracticePage {
     @FindBy(xpath = "//select[@id='multiple-select-example']")
     WebElement multipleSelection;
 
+    @FindBy(xpath = "//button[@id='openwindow']")
+    WebElement openwindow;
+    @FindBy(id = "search-courses")
+    WebElement newWindowSearchBox;
+
 
     public void carSelectionBMWRadioButton(){
         bmwradio.click();
@@ -29,8 +38,6 @@ public class PracticePage {
     public void carSelectionHONDARadioButton(){
         hondaradio.click();
     }
-
-
     public void selectCarsFromTheList1(String car) throws InterruptedException {
         Select select1 = new Select(selectCars);
         select1.selectByVisibleText(car);
