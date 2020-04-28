@@ -1,10 +1,7 @@
 package letscodeitpractice;
 
 import letscodeit.PracticePage;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
@@ -12,6 +9,8 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -33,16 +32,15 @@ public class TestPracticePage {
         driver.manage().deleteAllCookies();
     }
     public void accessToLetsCodeItPracticePage(){
-        practicePage = PageFactory.initElements(driver, PracticePage.class);
+        practicePage = PageFactory.initElements(driver,PracticePage.class);
 
     }
-    @Test
+    @Test//Selecting all the radio Buttons and Check Box in one method
     public void radioButtonSelection() throws InterruptedException {
         boolean isChecked;
-        //to select all the radio Buttons and Check Box in one method
+        //Selecting all the radio Buttons only
 //      List<WebElement> radioButtons = driver.findElements
 //      (By.xpath("//input[contains(@type,'radio') and contains(@name,'cars')]"));
-
         //to select all the cars(radioButton and CheckBox)
         List<WebElement> radioButtons = driver.findElements(By.name("cars"));
         System.out.println("The size of the list is: "+radioButtons.size());
@@ -55,24 +53,22 @@ public class TestPracticePage {
                 }
         }
     }
-
-    @Test
+    @Test//Selecting BMW radio button
     public void testCarSelectionBMWRadioButton(){
         accessToLetsCodeItPracticePage();
         practicePage.carSelectionBMWRadioButton();
     }
-    @Test
+    @Test//Selecting Benz radio button
     public void testCarSelectionBENZRadioButton(){
         accessToLetsCodeItPracticePage();
         practicePage.carSelectionBENZRadioButton();
     }
-    @Test
+    @Test//Selecting Honda radio button
     public void testCarSelectionHONDARadioButton(){
         accessToLetsCodeItPracticePage();
         practicePage.carSelectionHONDARadioButton();
     }
-    @Test
-    //to test all the selecting items from the List in one method
+    @Test//to test all the selecting items from the List
     public void testSelectCarsFromTheList() throws InterruptedException {
         WebElement element = driver.findElement(By.xpath("//select[@id='carselect']"));
         Select select = new Select(element);
@@ -82,36 +78,33 @@ public class TestPracticePage {
         Thread.sleep(2000);
         select.selectByVisibleText("Honda");
         Thread.sleep(2000);
-        //to get all the available listed options
+    }
+    @Test//to test all the selecting items from the List in one method
+    public void testSelectCaresFromTheListUsingForLoop() throws InterruptedException {
+        WebElement element = driver.findElement(By.xpath("//select[@id='carselect']"));
+        Select select = new Select(element);
         List<WebElement> elementList = select.getOptions();
         for (int i = 0; i<elementList.size(); i++){
-            String options = elementList.get(i).getText();
-            System.out.println(options);
+            elementList.get(i).click();
+            Thread.sleep(2000);
+            System.out.println(elementList.get(i).getText());
         }
     }
-
-    @Test
+    @Test//Select by visible text from dropdown
     public void testSelectCarsFromTheList1() throws InterruptedException {
         accessToLetsCodeItPracticePage();
         practicePage.selectCarsFromTheList1("Honda");
     }
-    @Test
+    @Test//Select by value from dropdown
     public void testSelectCarsFromTheList2() throws InterruptedException {
         accessToLetsCodeItPracticePage();
         practicePage.selectCarsFromTheList2("bmw");
     }
-    @Test
+    @Test//Select by index from dropdown
     public void testSelectCarsFromTheList3() throws InterruptedException {
         accessToLetsCodeItPracticePage();
         practicePage.selectCarsFromTheList(1);
     }
-
-    @Test
-    public void testMultipleSelectionFromTheList() throws InterruptedException {
-        accessToLetsCodeItPracticePage();
-        practicePage.selectMultipleOptionsFromTheList();
-    }
-
     @Test//to choose multiple elements from the dropdown box
     public void testMultipleSelection() throws InterruptedException {
         WebElement apple = driver.findElement(By.xpath("//option[@value='apple']"));
@@ -121,7 +114,7 @@ public class TestPracticePage {
         action.keyDown(Keys.CONTROL).click(apple).click(orange).click(peach).build().perform();
         Thread.sleep(2000);
     }
-    @Test
+    @Test//Window handling using for loop
     public void testWindowHandles() throws InterruptedException {
         String parentWindow = driver.getWindowHandle();//to get ID of parent Window
         System.out.println("Parent Window ID is: " +parentWindow);//to print parent window ID
@@ -143,7 +136,77 @@ public class TestPracticePage {
         driver.switchTo().window(parentWindow);//to get back into parent window
         System.out.println("Returned Parent Window Title is: "+driver.getTitle());//to print/assert returned window
     }
+    @Test//Window Handling using Iterator
+    public void testWindowHandling() throws InterruptedException {
+        driver.findElement(By.xpath("//button[@id='openwindow']")).click();
+        //to store both window IDs in a Set
+        Set<String> windowsID = driver.getWindowHandles();
+        //to Iterate both window IDs
+        Iterator<String> iterator = windowsID.iterator();
+        iterator.hasNext();//to check if there has in iterator object/start iterator
+        String parentWindow = iterator.next();//to go to the parent window
+        String newWindow = iterator.next();//to go to the new window
+        System.out.println("Parent WindowID is    : "+parentWindow);
+        System.out.println("New WindowID is       : "+ newWindow);
 
+        driver.switchTo().window(newWindow);//to switch to the new window
+        System.out.println("New window title is   : "+ driver.getTitle());
+        Thread.sleep(2000);
+        //to perform any action on the new window
+        driver.findElement(By.id("search-courses")).sendKeys("java");
+        Thread.sleep(2000);
+        driver.close();//to close new window
+        driver.switchTo().window(parentWindow);//to switch to the parent window
+        System.out.println("Parent Window Title is: " +driver.getTitle());
+    }
+    @Test//TabWindow Handling using for loop
+    public void testNewTabHandling() throws InterruptedException {
+        String parentWindowTabID = driver.getWindowHandle();
+        System.out.println("Parent window ID is: "+parentWindowTabID);
+        System.out.println("The parent tab window ID is: "+driver.getTitle());
+
+        driver.findElement(By.id("opentab")).click();
+        Set<String> windows = driver.getWindowHandles();
+        for(String window: windows){
+            System.out.println(window);
+            if(!window.equals(parentWindowTabID)){
+                driver.switchTo().window(window);
+                driver.findElement(By.xpath("//div[@class='container']//div[1]//div[1]//div[1]//a[1]//div[1]//div[1]//img[1]")).click();
+                //driver.findElement(By.xpath("//input[@id='search-courses']")).sendKeys("java");
+                driver.findElement(By.xpath("//a[@id='watchpromo']")).click();
+                
+                Thread.sleep(2000);
+                driver.close();
+            }
+        }
+        driver.switchTo().window(parentWindowTabID);
+        System.out.println("Returned window ID is: "+parentWindowTabID);
+    }
+    @Test//Alert Handling by accepting the alert
+    public void alertHandlingByaccepting() throws InterruptedException {
+        driver.findElement(By.xpath("//input[@id='name']")).sendKeys("Mike Miller");
+        driver.findElement(By.id("alertbtn")).click();
+        Alert myAlert = driver.switchTo().alert();
+        System.out.println("Alert's message: "+ myAlert.getText());
+        Thread.sleep(2000);
+        myAlert.accept();
+    }
+    @Test
+    public void alertHandlingByDismissing() throws InterruptedException {
+        driver.findElement(By.xpath("//input[@id='name']")).sendKeys("Mike Miller");
+        driver.findElement(By.id("confirmbtn")).click();
+        Alert myAlert = driver.switchTo().alert();
+        System.out.println("Alert message: "+myAlert.getText());
+        Thread.sleep(2000);
+        myAlert.dismiss();
+    }
+    @Test//test to do reload practice page by Mouse Hovering
+    public void mouseHovering() throws InterruptedException {
+        Actions actions = new Actions(driver);
+        actions.moveToElement(driver.findElement(By.id("mousehover"))).perform();
+        Thread.sleep(2000);
+        driver.findElement(By.xpath("//a[contains(text(),'Reload')]")).click();
+    }
     @AfterMethod
     public void tearDown(){
         driver.quit();

@@ -1,14 +1,12 @@
 package letscodeit;
 
-import org.openqa.selenium.WebDriver;
+
+
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.remote.server.handler.SwitchToWindow;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
-import java.util.Set;
 
-public class PracticePage {
+public class PracticePage{
 
     @FindBy(xpath = "//input[@id='bmwradio']")
     WebElement bmwradio;
@@ -27,6 +25,14 @@ public class PracticePage {
     WebElement openwindow;
     @FindBy(id = "search-courses")
     WebElement newWindowSearchBox;
+
+    @FindBy(xpath = "//input[@id='name']")
+    WebElement alertEnterName;
+    @FindBy(id = "alertbtn")
+    WebElement alertButton;
+
+    @FindBy(id = "mousehover")
+    WebElement mouseHover;
 
 
     public void carSelectionBMWRadioButton(){
@@ -58,4 +64,5 @@ public class PracticePage {
         select.selectByValue("Orange");
         Thread.sleep(2000);
     }
+
 }
