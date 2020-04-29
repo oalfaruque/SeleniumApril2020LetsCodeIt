@@ -9,7 +9,6 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -120,7 +119,7 @@ public class TestPracticePage {
         System.out.println("Parent Window ID is: " +parentWindow);//to print parent window ID
         System.out.println("Parent Window Title is: " +driver.getTitle());//to print/assert parent window
 
-        driver.findElement(By.xpath("//button[@id='openwindow']")).click();//to open new window
+        driver.findElement(By.xpath("//button[@id='openwindow']")).sendKeys(Keys.ENTER);//instead of .click method ENTER key is used
         Set<String> windows = driver.getWindowHandles();//to get all windows IDs
         for (String window : windows) {//for each loop to iterate all window IDs
             System.out.println(window);//to print all window IDs
@@ -191,7 +190,7 @@ public class TestPracticePage {
         Thread.sleep(2000);
         myAlert.accept();
     }
-    @Test
+    @Test//Alert Handling by dismissing the alert
     public void alertHandlingByDismissing() throws InterruptedException {
         driver.findElement(By.xpath("//input[@id='name']")).sendKeys("Mike Miller");
         driver.findElement(By.id("confirmbtn")).click();
@@ -200,12 +199,28 @@ public class TestPracticePage {
         Thread.sleep(2000);
         myAlert.dismiss();
     }
-    @Test//test to do reload practice page by Mouse Hovering
+    @Test//test Mouse Hovering to reload practice page
     public void mouseHovering() throws InterruptedException {
         Actions actions = new Actions(driver);
         actions.moveToElement(driver.findElement(By.id("mousehover"))).perform();
         Thread.sleep(2000);
         driver.findElement(By.xpath("//a[contains(text(),'Reload')]")).click();
+    }
+    @Test//test Drag and Drop(in www.jquery.com)
+    public void testDragAndDrop() throws InterruptedException {
+        driver.get("https://jqueryui.com/droppable/");
+        driver.switchTo().frame(0);
+        Actions actions = new Actions(driver);
+        Thread.sleep(2000);
+        WebElement draggable = driver.findElement(By.id("draggable"));
+        WebElement droppable = driver.findElement(By.id("droppable"));
+        actions.dragAndDrop(draggable,droppable).build().perform();
+        Thread.sleep(3000);
+    }
+    @Test//test to get Text from Web Table
+    public void testGettingTextFromWebTable(){
+        String strOfTable = driver.findElement(By.xpath("//table/tbody/tr[3]/td[2]")).getText();
+        System.out.println(strOfTable);
     }
     @AfterMethod
     public void tearDown(){
